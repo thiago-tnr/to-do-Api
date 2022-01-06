@@ -16,4 +16,4 @@ server.use("/ping", (req, res) => {
 server.use((req, res) => {
     res.status(404).json({ message: "Endpoint not found" });
 });
-server.listen(process.env.PORT);
+server.listen(process.env.PORT || 4000);

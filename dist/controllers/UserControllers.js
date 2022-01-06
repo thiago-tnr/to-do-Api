@@ -19,16 +19,21 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.body.email && req.body.password) {
-        let { email, password } = req.body;
-        let hasUser = yield Auth_1.User.findOne({ where: { email } });
-        if (!hasUser) {
-            let newUser = yield Auth_1.User.create({ email, password });
-            const token = jsonwebtoken_1.default.sign({ id: newUser.id, email: newUser.email }, process.env.JWT_SECRET_KEY, { expiresIn: 60 });
-            res.status(201);
-            res.json({ id: newUser.id, token });
+        try {
+            let { email, password } = req.body;
+            let hasUser = yield Auth_1.User.findOne({ where: { email } });
+            if (!hasUser) {
+                let newUser = yield Auth_1.User.create({ email, password });
+                const token = jsonwebtoken_1.default.sign({ id: newUser.id, email: newUser.email }, process.env.JWT_SECRET_KEY, { expiresIn: 60 });
+                res.status(201);
+                res.json({ id: newUser.id, token });
+            }
+            else {
+                res.json({ error: "Email already exists" });
+            }
         }
-        else {
-            res.json({ error: "Email already exists" });
+        catch (error) {
+            console.log(error);
         }
     }
     else {

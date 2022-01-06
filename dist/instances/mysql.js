@@ -10,4 +10,3 @@ dotenv_1.default.config();
 exports.connection = new sequelize_1.Sequelize(process.env.MYSQL_URL, {
     dialect: "mysql",
 });
-

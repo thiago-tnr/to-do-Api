@@ -8,27 +8,32 @@ dotenv.config();
 
 export const register = async (req:Request, res:Response) => {
     if(req.body.email && req.body.password){
+        try {
+            
         let {email, password} = req.body;
         let hasUser = await User.findOne({where:{email}});
 
-        if(!hasUser){
-            let newUser = await User.create({email, password});
-
-            const token = JWT.sign(
-                {id: newUser.id, email: newUser.email},
-                process.env.JWT_SECRET_KEY as string,
-                {expiresIn: 60}
-            );
-
-            res.status(201)
-            res.json({ id: newUser.id, token });
-        }
-        else{
-            res.json({error: "Email already exists"})
+            if(!hasUser){
+                let newUser = await User.create({email, password});
+                const token = JWT.sign(
+                    {id: newUser.id, email: newUser.email},
+                    process.env.JWT_SECRET_KEY as string,
+                    {expiresIn: 60}
+                );
+                res.status(201)
+                res.json({ id: newUser.id, token });
+            }
+            else{
+                res.json({error: "Email already exists"})
+            }
+            
+        } catch (error) {
+            console.log(error)
         }
     }else{
         res.json({error: "email and/or passowrd not send"})
     }
+        
 }
 
 export const login =async (req:Request, res:Response) => {

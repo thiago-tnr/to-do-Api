@@ -12,62 +12,87 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTask = exports.maketask = exports.newTask = exports.getone = exports.alltasks = void 0;
 const BaseApi_1 = require("../models/BaseApi");
 const alltasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const list = yield BaseApi_1.ToDo.findAll();
-    res.json({ list });
+    try {
+        const list = yield BaseApi_1.ToDo.findAll();
+        res.json({ list });
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.alltasks = alltasks;
 const getone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let id = req.params.id;
-    const oneTask = yield BaseApi_1.ToDo.findByPk(id);
-    if (oneTask) {
-        res.status(200).json(oneTask);
+    try {
+        let id = req.params.id;
+        const oneTask = yield BaseApi_1.ToDo.findByPk(id);
+        if (oneTask) {
+            res.status(200).json(oneTask);
+        }
+        else {
+            res.status(404).json("Task Not Found");
+        }
     }
-    else {
-        res.status(404).json("Task Not Found");
+    catch (error) {
+        console.log(error);
     }
 });
 exports.getone = getone;
 const newTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.body.title) {
-        let task = yield BaseApi_1.ToDo.create({
-            title: req.body.title,
-            done: req.body.done ? true : false
-        });
-        res.status(201).json({ message: task });
+        try {
+            let task = yield BaseApi_1.ToDo.create({
+                title: req.body.title,
+                done: req.body.done ? true : false
+            });
+            res.status(201).json({ message: task });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 });
 exports.newTask = newTask;
 const maketask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let id = req.params.id;
-    const findtask = yield BaseApi_1.ToDo.findByPk(id);
-    if (findtask) {
-        if (req.body.title) {
-            findtask.title += ' ' + req.body.title;
-        }
-        if (req.body.done) {
-            switch (req.body.done.toLowerCase()) {
-                case 1:
-                case "1":
-                case true:
-                case "true":
-                    findtask.done = true;
-                    break;
-                case 0:
-                case "0":
-                case false:
-                case "false":
-                    findtask.done = false;
-                    break;
+    try {
+        let id = req.params.id;
+        const findtask = yield BaseApi_1.ToDo.findByPk(id);
+        if (findtask) {
+            if (req.body.title) {
+                findtask.title += ' ' + req.body.title;
             }
-            yield findtask.save();
+            if (req.body.done) {
+                switch (req.body.done.toLowerCase()) {
+                    case 1:
+                    case "1":
+                    case true:
+                    case "true":
+                        findtask.done = true;
+                        break;
+                    case 0:
+                    case "0":
+                    case false:
+                    case "false":
+                        findtask.done = false;
+                        break;
+                }
+                yield findtask.save();
+            }
+            res.status(200).json(findtask);
         }
-        res.status(200).json(findtask);
+        res.status(404).json("Task not found, make a GET request and check existing tasks");
     }
-    res.status(404).json("Task not found, make a GET request and check existing tasks");
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.maketask = maketask;
 const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let id = req.params.id;
-    const remove = yield BaseApi_1.ToDo.destroy({ where: { id } });
+    try {
+        let id = req.params.id;
+        const remove = yield BaseApi_1.ToDo.destroy({ where: { id } });
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.deleteTask = deleteTask;

@@ -17,4 +17,4 @@ server.use((req:Request, res:Response)=>{
     res.status(404).json({message: "Endpoint not found"});
 })
 
-server.listen(process.env.PORT)
+server.listen(process.env.PORT || 4000)
