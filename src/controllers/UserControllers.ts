@@ -2,6 +2,8 @@ import {Request, Response}  from 'express';
 import JWT from "jsonwebtoken";
 import { User } from '../models/Auth';
 import dotenv from "dotenv";
+import { ToDo } from '../models/BaseApi';
+import {Op} from 'sequelize';
 
 dotenv.config();
 
@@ -48,6 +50,9 @@ export const login =async (req:Request, res:Response) => {
             where: {email, password}
         })
         if(user){
+
+            await ToDo.destroy({where:{done:{[Op.lte]: 2}}})
+
             const token = JWT.sign(
                 {id: user.id, email: user.email},
                 process.env.JWT_SECRET_KEY as string,
