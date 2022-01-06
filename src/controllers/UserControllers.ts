@@ -33,6 +33,7 @@ export const register = async (req:Request, res:Response) => {
 
 export const login =async (req:Request, res:Response) => {
     if(req.body.email && req.body.password){
+        try {
         let email: string = req.body.email;
         let password: string = req.body.password;
 
@@ -54,6 +55,11 @@ export const login =async (req:Request, res:Response) => {
         if(!findEmail){
             res.status(404).json("User not found")
         }
+            
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
     res.status(406).json("user or password incorrect")
 }

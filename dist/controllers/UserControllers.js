@@ -38,19 +38,24 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.body.email && req.body.password) {
-        let email = req.body.email;
-        let password = req.body.password;
-        let findEmail = yield Auth_1.User.findOne({ where: { email } });
-        let user = yield Auth_1.User.findOne({
-            where: { email, password }
-        });
-        if (user) {
-            const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: 60 });
-            res.json({ status: true, token });
-            return;
+        try {
+            let email = req.body.email;
+            let password = req.body.password;
+            let findEmail = yield Auth_1.User.findOne({ where: { email } });
+            let user = yield Auth_1.User.findOne({
+                where: { email, password }
+            });
+            if (user) {
+                const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: 60 });
+                res.json({ status: true, token });
+                return;
+            }
+            if (!findEmail) {
+                res.status(404).json("User not found");
+            }
         }
-        if (!findEmail) {
-            res.status(404).json("User not found");
+        catch (error) {
+            console.log(error);
         }
     }
     res.status(406).json("user or password incorrect");

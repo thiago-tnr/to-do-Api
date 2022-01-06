@@ -20,6 +20,7 @@ exports.middlewareAuth = {
                 sucess = true;
             }
             catch (error) {
+                console.log(error);
             }
         }
         if (sucess) {
