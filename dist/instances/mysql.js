@@ -7,7 +7,7 @@ exports.connection = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-exports.connection = new sequelize_1.Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+exports.connection = new sequelize_1.Sequelize(jqyrk44kaeu2ntm4, rt5kb1g15hrn21jj, fq6p3ny2xw7rxtr4 , {
     dialect: "mysql",
-    port: parseInt(process.env.MYSQL_PORT)
+    port: 3306
 });
